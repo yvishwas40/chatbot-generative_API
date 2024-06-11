@@ -41,8 +41,7 @@
 # print(response.text)
 
 import os
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, jsonify, request
 import google.generativeai as genai
 
 app = Flask(__name__)
@@ -50,16 +49,16 @@ app = Flask(__name__)
 # Configure Google AI SDK
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+@app.get('/')
+def index_get():
+    return render_template('base.html')
 
-@app.route('/submit_feedback', methods=['POST'])
-def submit_feedback():
-    feedback = request.form['feedback']
-    # Generate response from the chatbot API
-    response = generate_response(feedback)
-    return response
+@app.post('/predict')
+def predict():
+    text = request.get_json().get("message")
+    response = generate_response(text)
+    message = {"answer": response}
+    return jsonify(message)
 
 def generate_response(feedback):
     # Create the model
@@ -67,7 +66,7 @@ def generate_response(feedback):
         "temperature": 1,
         "top_p": 0.95,
         "top_k": 64,
-        "max_output_tokens": 8192,
+        "max_output_tokens": 100,
         "response_mime_type": "text/plain",
     }
 

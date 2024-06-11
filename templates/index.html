@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBot</title>
+    <title>Chatbot</title>
 </head>
 <body>
-    <h1>Medical ChatBot</h1>
-    <form action="/submit_feedback" method="post">
-        <label for="feedback">Do you have Any Queries?</label><br>
-        <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br>
-        <input type="submit" value="Ask">
-    </form>
-    <div id="response"></div>
+<div class="container">
+    <div class="chatbox">
+        <div class="chatbox__support">
+            <div class="chatbox__header">
+                <div class="chatbox__image--header">
+                    <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-5--v1.png" alt="image">
+                </div>
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header">Chat support</h4>
+                    <p class="chatbox__description--header">Hi. My name is ChatVeda. How can I help you?</p>
+                </div>
+            </div>
+            <div class="chatbox__messages">
+                <div></div>
+            </div>
+            <div class="chatbox__footer">
+                <input type="text" placeholder="Write a message...">
+                <button class="chatbox__send--footer send__button">Send</button>
+            </div>
+        </div>
+        <div class="chatbox__button">
+            <button><img src="{{ url_for('static', filename='images/chatbox-icon.svg') }}" /></button>
+        </div>
+    </div>
+</div>
 
     <script>
-        // Function to submit feedback form asynchronously
-        document.querySelector('form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
-            const responseData = await response.text();
-            document.getElementById('response').innerText = responseData;
-        });
+        $SCRIPT_ROOT = {{ request.script_root|tojson }};
     </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
 </body>
 </html>
